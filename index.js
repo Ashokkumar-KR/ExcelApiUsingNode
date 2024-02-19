@@ -471,16 +471,25 @@ function processExcelData(excelFileDir) {
   return excelData;
 }
 
+app.get("/",(req,res)=>{
+  res.send("Please add excel File name after / to get Data")
+})
 // get rid of error which occurs due to missing icon
 app.get("/favicon.ico", (req, res) => res.status(204));
 
 app.get("/:excelFileName", (req, res) => {
-  let requestedExcelFile = req.params.excelFileName;
+  try{
+    let requestedExcelFile = req.params.excelFileName;
   //console.log(requestedExcelFile);
   const jsonDataOutput = processExcelData(
     `./Assets/${requestedExcelFile}.xlsx`
   );
   res.send(jsonDataOutput);
+  }catch(e){
+    //console.log(e);
+    res.send("Please Check File Name: " + req.params.excelFileName);
+  }
+  
 });
 
 const port = process.env.PORT || 3000;
